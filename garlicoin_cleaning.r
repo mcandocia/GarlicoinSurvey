@@ -341,7 +341,7 @@ ggplot() + geom_density(data=prices %>% filter(value < 40), aes(x=value, fill=va
   ylab('relative density') + geom_vline(xintercept=c(0.04, 3.90)) + 
   geom_text(data=actual_prices, aes(x=value+0.1, y=c(0.18,0.18, 0.1), label=label),
             hjust=0) + 
-  annotate('rect', xmin=0.5, xmax=1.4, ymin=-0.001, ymax=0.3, fill='#33333333', alpha=0.33) + 
+  ggplot2::annotate('rect', xmin=0.5, xmax=1.4, ymin=-0.001, ymax=0.3, fill='#33333333', alpha=0.33) + 
   geom_text(data=price_range, aes(x=lower, y = 0.25, label='approximate value\nof Garlicoin when survey\nwas administered\n($0.50-$1.40)'),
             hjust=0) + 
   scale_fill_discrete('prediction \ntimeframe')

@@ -248,7 +248,7 @@ end.rcode-->
 
 <p> Oddly, the number of responses for Garlicoin mining are 33&#37; lower (from 75&#37; to 50&#37;) lower for this question. A small bit may be explained with some of the error introduced by a validation oversight for the first 17 responses, but I am guessing the question itself may have been too information-dense for the attention spans of some of the survey-takers.</p>
 
-<!-- begin.rcode mining_behavior, message=FALSE, echo=FALSE, warning=FALSE
+<!-- begin.rcode mining_behavior, message=FALSE, echo=FALSE, warning=FALSE, fig.width=5, fig.height=8
 # mining and other behavior
 # I forget why I called it "pool"; it is really crytpocurrency; I must've been tired
 
@@ -296,7 +296,9 @@ end.rcode-->
 
 <p> I asked respondents what they thought the price would be in 1 month (March 2018) and 6 months (August 2018). The medians of those values were $2.00 and $4.20, respectively, after removing some very unrealistic outliers. In early March, its value decreased to around $0.11, and I am guessing its value won't be anywhere above that value for quite a while. </p>
 
-<!--begin.rcode predictions echo=FALSE, message=FALSE, warning=FALSE
+<p> I used <a href="https://coinmarketcap.com/currencies/garlicoin/" target="_blank" id="coinmarketbase_garlicoin_out">coinmarketcap.com</a> to retrieve historic values of the cryptocurrency. The area in dark gray is the approximate value at the time of the survey.</p>
+
+<!--begin.rcode predictions, echo=FALSE, message=FALSE, warning=FALSE
 # price predictions
 
 
@@ -327,14 +329,17 @@ ggplot() + geom_density(data=prices %>% filter(value < 40), aes(x=value, fill=va
   ylab('relative density') + geom_vline(xintercept=c(0.04, 3.90)) + 
   geom_text(data=actual_prices, aes(x=value+0.1, y=c(0.18,0.18, 0.1), label=label),
             hjust=0) + 
-  annotate('rect', xmin=0.5, xmax=1.4, ymin=-0.001, ymax=0.3, fill='#33333333', alpha=0.33) + 
+  ggplot2::annotate('rect', xmin=0.5, xmax=1.4, ymin=-0.001, ymax=0.3, fill='#33333333', alpha=0.33) + 
   geom_text(data=price_range, aes(x=lower, y = 0.25, label='approximate value\nof Garlicoin when survey\nwas administered\n($0.50-$1.40)'),
             hjust=0) + 
-  scale_fill_discrete('prediction \ntimeframe')
+  scale_fill_discrete('prediction \ntimeframe') + 
+  theme(plot.title=element_text(size=rel(1.6)),
+        legend.text=element_text(size=rel(1.2)),
+        legend.title=element_text(size=rel(1.2)))
 
 end.rcode-->
 
-<p> One possible and likely reason for the early spikes in prices were <a href="https://en.wikipedia.org/wiki/Pump_and_dump" id="wiki_pump_and_dump_out" target="_blank">"Pump and Dump"</a> schemes, where a group will start buying a lot of a commodity/asset, driving its price up, and then rely on the momentum of those outside the group buying in response, sometimes attributed to the <a href="https://en.wikipedia.org/wiki/Fear_of_missing_out" id="wiki_fear_of_missing_out_out" target="_blank">fear of missing out</a>. Then, when the price is sufficiently high, the initial buyers will "dump" (sell) all of the commodity/asset, making a huge profit, and then others will realize that no one is buying at higher prices, and the price will crash back down. This is illegal to do in many areas of finance, although there are no formal rules for cryptocurrencies regarding this. </p>
+<p> One possible and likely reason for the early spikes in prices were <a href="https://en.wikipedia.org/wiki/Pump_and_dump" id="wiki_pump_and_dump_out" target="_blank">"Pump and Dump"</a> schemes, where a group will start buying a lot of a commodity/asset, driving its price up, and then rely on the momentum of those outside the group buying in response, sometimes attributed to the <a href="https://en.wikipedia.org/wiki/Fear_of_missing_out" id="wiki_fear_of_missing_out_out" target="_blank">fear of missing out</a>. Then, when the price is sufficiently high, the initial buyers will "dump" (sell) all of the commodity/asset, making a huge profit, and then others will realize that no one is buying at higher prices, and the price will crash back down. This is illegal to do in many areas of finance, although there are no formal rules for cryptocurrencies regarding  "pump and dump". </p>
 
 <h2> Garlicoin Word Cloud!</h2>
 
@@ -370,7 +375,7 @@ end.rcode-->
 
 <p> Respondents also provided Demographics. The general takeaway is that the vast majority of the community is male, white, non-Hispanic, and from the United States, Canada, or the UK. Most of the users are no older than 34. </p>
 
-<!--begin.rcode demographics echo=FALSE, message=FALSE, warning=FALSE 
+<!--begin.rcode demographics, echo=FALSE, message=FALSE, warning=FALSE
 ggplot(survey) + stat_count(aes(x=country_ordered, y=..prop.., group=1, fill='goldenrod')) + 
   scale_y_continuous(label=percent) + scale_fill_identity() + 
   ggtitle('Proportion of Responses from Different Countries',
@@ -381,6 +386,7 @@ ggplot(survey) + stat_count(aes(x=country_ordered, y=..prop.., group=1, fill='go
                 ),
             stat='count',
             vjust='inward') + better_text_size_manylabs
+cat('<br/>')
 
 #race 
 race_matrix = split_delimited_column_values(survey, 'What.is.your.race..Select.all.that.apply.') %>%
@@ -389,6 +395,7 @@ race_matrix = split_delimited_column_values(survey, 'What.is.your.race..Select.a
                                                                                   'Native Hawaiian/Pacific Islander','Other'))
                                                                )
   )
+cat('<br/>')
 
 ggplot(race_matrix) + geom_bar(aes(x=variable, y=proportion, fill='goldenrod'),
                                stat='identity') + 
@@ -400,6 +407,7 @@ ggplot(race_matrix) + geom_bar(aes(x=variable, y=proportion, fill='goldenrod'),
                  label=bquote(.(custom_percent2)(proportion, `1`+`0`))),
             hjust='inward') + 
   coord_flip() + better_text_size_manylabs
+cat('<br/>')
   
 ggplot(survey %>% mutate(Are.you.Latino.a..Hispanic.=factor(Are.you.Latino.a..Hispanic., levels=c('Yes','No')))) + 
   stat_count(aes(x=Are.you.Latino.a..Hispanic., y=..prop.., group=1,
@@ -413,7 +421,7 @@ ggplot(survey %>% mutate(Are.you.Latino.a..Hispanic.=factor(Are.you.Latino.a..Hi
             stat='count',
             size=6) + better_text_size_manylabs
  
-
+cat('<br/>')
 ggplot(survey) + stat_count(aes(x=gender, y=..prop.., group=1, fill='goldenrod')) + 
   scale_y_continuous(label=percent) + scale_fill_identity() + 
   ggtitle('Proportion of Responses Among Genders',
@@ -425,6 +433,7 @@ ggplot(survey) + stat_count(aes(x=gender, y=..prop.., group=1, fill='goldenrod')
   stat='count',
   vjust='inward') + better_text_size_manylabs
 
+cat('<br/>')
 ggplot(survey) + stat_count(aes(x=age_group, y=..prop.., group=1, fill='goldenrod')) + 
   scale_y_continuous(label=percent) + scale_fill_identity() + 
   ggtitle('Proportion of Responses Among Age Groups',
@@ -438,3 +447,7 @@ ggplot(survey) + stat_count(aes(x=age_group, y=..prop.., group=1, fill='goldenro
 
 # done
 end.rcode-->
+
+<h2> Code </h2>
+
+<p> GitHub repository: <a href="https://github.com/mcandocia/GarlicoinSurvey" id="github_garlicoin_survey_out" target="_blank">https://github.com/mcandocia/GarlicoinSurvey</a></p>
